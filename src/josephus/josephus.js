@@ -1,56 +1,43 @@
 function josephus(list, m) {
 
-    if(!list || list.length === 0) {
-        return list;
-    }
+// Convert list to circular list
+    // Find tail node by checkif node.next is null
+    let tail = getTailNode(list);
 
-    if(list.length === 1) {
-        return list.head.value;
-    }
-
-    let node = list.head;
-    let tail = null;
-
-    while(node) {
-        tail = node;
-        node = node.next;
-    }
-
+    // Set the tail node to the head to make it a circular list
     tail.next = list.head;
-    node = list.head;
-    // Now we have a circular linked list
-    while(node.next != node) {
+    let node = list.head; // starting point of the node
 
+    // Loop till at least 1 element is remaining
+    while(node.next != node) {
+        //  Move foreard by m - 1 times as mth element is to be removed
         for(let i=0;i<m-1;i++) {
             node = node.next;
         }
-  
+
+        if(node.next === list.head) {
+            list.head = list.head.next;
+        }
+
         node.next = node.next.next;
-       // node = node.next;
-        console.log("Node.value "+node.value);
+        node = node.next;
     }
-  return node.value;
+
+    return node.value;  
+}
 
   
 
+function getTailNode(list) {
+let tail = null;
+let currentNode = list.head;
 
+while(currentNode) {
+    tail = currentNode;
+    currentNode = currentNode.next;
+}
 
-
-
-
-// // Loop until only one node remains
-// while (currentNode.next !== currentNode) {
-//     // Move (m-1) steps to find the node to be removed
-//     for (let i = 0; i < m - 1; i++) {
-//         currentNode = currentNode.next;
-//     }
-
-//     // Remove the node
-//     currentNode.next = currentNode.next.next; // Skip the node to be removed
-// }
-
-// // Return the value of the last remaining node
-// return currentNode.value;
+return tail;
 }
 
 
